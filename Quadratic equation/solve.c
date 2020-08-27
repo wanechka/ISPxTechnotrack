@@ -3,75 +3,79 @@
 #include <math.h>
 #include <assert.h>
 
-#define QF 42 
+const int Q_FAIL = 42; 
 
-int quadrSolve(double a, double b, double c, double *x1, double *x2);
+
+int quadrSolve (double a, double b, double c, double *x1, double *x2);
+int isZero (double p); 
+
+
 
 int main()
 {
-	printf("This is quadratic equation solver!\n");
-	printf("Please, input a, b, c\n");
+	printf ("This is quadratic equation solver!\n");
+	printf ("Please, input a, b, c\n");
 
 	double a = 0, b = 0, c = 0;
-	scanf("%lf %lf %lf", &a, &b, &c);
+	scanf ("%lf %lf %lf", &a, &b, &c);
 
 	double x1 = 0, x2 = 0;
-	int number = quadrSolve(a, b, c, &x1, &x2);
+	int rootNumber = quadrSolve (a, b, c, &x1, &x2);
 
-	switch(number)
+	switch (rootNumber)
 	{
 		case 0:
-			printf("No roots!\n");
+			printf ("No roots!\n");
 			break;
 		case 1:
-			printf("%lf is the only root of the given equation\n", x1);
+			printf ("%lf is the only root of the given equation\n", x1);
 			break;
 		case 2:
-			printf("%lf, %lf are roots of the given equation\n", x1, x2);
+			printf ("%lf, %lf are roots of the given equation\n", x1, x2);
 			break;
-		case QF:
-			printf("Ooh! Infinite number of roots!\n");
+		case Q_FAIL:
+			printf ("Ooh! Infinite number of roots!\n");
 			break;
 	}
 
 	return 0;
 }
 
-int quadrSolve(double a, double b, double c, double *x1, double *x2)
+int quadrSolve (double a, double b, double c, double *x1, double *x2)
 {
-	if(!(isfinite(a)) || !(isfinite(b)) || !(isfinite(c)))
-		exit(EXIT_FAILURE);
+	if (!(isfinite(a)) || !(isfinite(b)) || !(isfinite(c)))
+		exit (EXIT_FAILURE);
 
-	assert(x1 != x2);
-	assert(x1 != NULL);
-	assert(x2 != NULL);
+	assert (x1 != x2);
+	assert (x1 != NULL);
+	assert (x2 != NULL);
 
-	if(a == 0)
+	if (isZero (a))
 	{
-		if(b == 0)
+		if (isZero (b))
 		{
-			return (c == 0)? QF: 0;
+			return (isZero (c))? Q_FAIL : 0;
 		}
 		else
 		{
-			*x1 = -c/b;
+			*x1 = - c / b;
 
 			return 1;
 		}
 	}
 
-	double D = b*b - 4*a*c;
+	double discr = b * b - 4 * a * c;
 
-	if(D > 0)
+	if (discr > 0)
 	{
-		*x1 = (-b + sqrt(D))/(2*a);
-		*x2 = (-b - sqrt(D))/(2*a);
+		*x1 = (-b + sqrt(discr)) / (2 * a);
+		*x2 = (-b - sqrt(discr)) / (2 * a);
 		
 		return 2;
 	}
-	else if(D == 0)
+	else if(isZero(discr))
 	{
-		*x1 = *x2 = -b/(2*a);
+		*x1 = *x2 = - b / (2 * a);
 
 		return 1;
 	}
@@ -79,5 +83,11 @@ int quadrSolve(double a, double b, double c, double *x1, double *x2)
 	{
 		return 0;
 	}
+}
 
+int isZero (double p){
+	if (p)
+		return 0;
+
+	return 1;
 }

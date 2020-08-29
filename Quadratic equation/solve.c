@@ -3,10 +3,47 @@
 #include <math.h>
 #include <assert.h>
 
+
+/**
+ * @file solve.c
+ *
+ * @brief Program for solving quadratic equations
+ * @brief just input a, b, c coefficients of ax^2 + bx + c = 0
+ *
+ * @author Ivan V. Tunyov, DCAM MIPT (System Programming Base Chair) Student
+ *
+ * @date 8/27/2020
+ */
+
+
 const int Q_FAIL = 42; 
 
 
+/**
+ * This function solves quadratic equation and returns its roots number
+ *
+ * @param [in]  a a-coeff
+ * @param [in]  b b-coeff
+ * @param [in]  c c-coeff
+ *
+ * @param [out] x1 Pointer to the first root
+ * @param [out] x2 Pointer to the second root
+ *
+ * @return Number of solutions
+ *
+ * @note If solution number is not finite returns Q_FAIL
+ */
 int quadrSolve (double a, double b, double c, double *x1, double *x2);
+
+
+/**
+ * This function is used for exact doubles comparison with zero
+ *
+ * @param [in] p double type number
+ *
+ * @note we are playing with ponters and data representation
+ * @return true if p equals 0, false in an another case
+ */
 bool isZero (double p); 
 
 
@@ -89,20 +126,22 @@ int quadrSolve (double a, double b, double c, double *x1, double *x2)
 
 bool isZero (double p)
 {
-  u_int8_t *bytePoint = (u_int8_t*)&p;
-
-  for (size_t i = 0; i < sizeof(double); i++)
-  {
-    u_int8_t byte = bytePoint[i];
-
-    for(int bit = 0; bit < 8; bit++)
-    {
-      if (byte & 1 != 0)
-        return false;
-      byte >>= 1;
-    }
-  }
-
-  return true;
+	///Pointer manipulations for bitwise access and zero comparation
+	u_int8_t *bytePoint = (u_int8_t*)&p;
+	
+	for (size_t i = 0; i < sizeof(double); i++)
+	{
+		u_int8_t byte = bytePoint[i];
+		
+		for(int bit = 0; bit < 8; bit++)
+		{
+			if (byte & 1 != 0)
+				return false;
+			
+			byte >>= 1;
+		}
+	}
+	
+	return true;
 }
 

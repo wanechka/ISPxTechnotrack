@@ -7,7 +7,7 @@ const int Q_FAIL = 42;
 
 
 int quadrSolve (double a, double b, double c, double *x1, double *x2);
-int isZero (double p); 
+bool isZero (double p); 
 
 
 
@@ -36,6 +36,8 @@ int main()
 		case Q_FAIL:
 			printf ("Ooh! Infinite number of roots!\n");
 			break;
+		default:
+			printf("Something went wrong...\n");
 	}
 
 	return 0;
@@ -85,9 +87,22 @@ int quadrSolve (double a, double b, double c, double *x1, double *x2)
 	}
 }
 
-int isZero (double p){
-	if (p)
-		return 0;
+bool isZero (double p)
+{
+  u_int8_t *bytePoint = (u_int8_t*)&p;
 
-	return 1;
+  for (size_t i = 0; i < sizeof(double); i++)
+  {
+    u_int8_t byte = bytePoint[i];
+
+    for(int bit = 0; bit < 8; bit++)
+    {
+      if (byte & 1 != 0)
+        return false;
+      byte >>= 1;
+    }
+  }
+
+  return true;
 }
+
